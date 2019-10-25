@@ -1,6 +1,13 @@
 import path from 'path'
 import { CleanWebpackPlugin } from 'clean-webpack-plugin'
 import { InjectManifest } from 'workbox-webpack-plugin'
+import HtmlWebpackPlugin from 'html-webpack-plugin'
+import template from 'html-webpack-template'
+
+const externals = [
+    'https://unpkg.com/react@16.10.2/umd/react.development.js',
+    'https://unpkg.com/react-dom@16.10.2/umd/react-dom.development.js',
+]
 
 export default {
     devtool: 'cheap-module-eval-source-map',
@@ -37,6 +44,12 @@ export default {
             swSrc: path.resolve('./src/sw-template.js'),
             include: [/\.js$/, /\.css$/],
         }),
+        new HtmlWebpackPlugin({
+            inject: false,
+            template,
+            appMountId: 'appContainer',
+            scripts: externals
+        })
     ],
     devServer: {
         contentBase: false,
@@ -63,10 +76,6 @@ export default {
                     console.log('processing ', req.url)
 
                     server.middleware.waitUntilValid((stats) => {
-                        const externals = [
-                            'https://unpkg.com/react@16.10.2/umd/react.development.js',
-                            'https://unpkg.com/react-dom@16.10.2/umd/react-dom.development.js',
-                        ]
                         const assets = stats.compilation.entrypoints.get("main").chunks
                             .reduce((memo, chunk) => [...memo, ...chunk.files], [])
                             .map(src => stats.compilation.compiler.options.output.publicPath + src)
