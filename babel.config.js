@@ -4,7 +4,8 @@ module.exports = {
         '@babel/preset-react',
         ['@babel/preset-env', {
             targets: {
-                esmodules: true
+                browsers: ['last 2 versions'],
+                // esmodules: true
             }
         }]
     ]

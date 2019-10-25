@@ -16,7 +16,8 @@ export default {
     output: {
         path: path.resolve('./dist/web'),
         publicPath: '/',
-        filename: '[name]-[contenthash].js'
+        filename: '[name]-[contenthash].js',
+        chunkFilename: '[name]-[chunkhash].js'
     },
     module: {
         rules: [
@@ -36,6 +37,22 @@ export default {
         runtimeChunk: {
             name: 'webpackRuntime',
         },
+        splitChunks: {
+            name: true,
+            cacheGroups: {
+                vendors: {
+                    test: /\/node_modules\//,
+                    chunks: 'all',
+                    enforce: true,
+                    priority: -10
+                },
+                default: {
+                    minChunks: 2,
+                    priority: -20,
+                    reuseExistingChunk: true
+                }
+            }
+        }
     },
     plugins: [
         new CleanWebpackPlugin(),
