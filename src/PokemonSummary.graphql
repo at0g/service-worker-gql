@@ -1,0 +1,12 @@
+fragment PokemonSummary on Pokemon {
+    name
+    id
+    resistant
+    image
+    number
+
+    evolutionRequirements {
+        name
+        amount
+    }
+}

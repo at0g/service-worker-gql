@@ -1,13 +1,15 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { createBrowserHistory } from 'history'
+import ApolloClient from 'apollo-boost';
 import App from './App'
+
+const apolloClient = new ApolloClient()
+const history = createBrowserHistory()
 
 const container = document.getElementById('appContainer')
 
-const el = <App
-    history={createBrowserHistory()}
-/>
+const el = <App { ...{ apolloClient, history } } />
 
 ReactDOM.render(el, container, () => {
     if ('serviceWorker' in navigator) {

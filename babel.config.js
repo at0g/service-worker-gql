@@ -1,5 +1,5 @@
 module.exports = {
-    sourceType: 'module',
+    // sourceType: 'module',
     presets: [
         '@babel/preset-react',
         ['@babel/preset-env', {
@@ -8,5 +8,8 @@ module.exports = {
                 // esmodules: true
             }
         }]
-    ]
+    ],
+    // plugins: [
+    //     'babel-plugin-graphql-tag'
+    // ]
 }

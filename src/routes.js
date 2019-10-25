@@ -21,17 +21,20 @@ const routes = [
             {
                 path: '/',
                 action: () => import(/* webpackChunkName: 'home' */'./Home.js')
-                    .then(module => ({
-                        component: module.default
-                    }))
+                    .then(module => module.default)
             },
             {
                 path: '/app-shell',
                 action: () => () => <div>App shell</div>
             },
             {
-                path: '/greet',
-                action: () => () => <div>Hi there!</div>
+                path: '/pokemons',
+                action: () => import(/* webpackChunkName: 'Pokemons' */'./Pokemons.js')
+                    .then(module => module.default)
+                    .catch((err) => {
+                        console.error(err)
+                        throw err;
+                    })
             },
             {
                 path: '(.*)',

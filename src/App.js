@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { ApolloProvider } from '@apollo/react-hooks'
 import UniversalRouter from 'universal-router'
 import defaultRoutes from './routes'
 
@@ -11,11 +12,12 @@ function getOnline() {
 
 export default function App(props) {
     const {
+        apolloClient,
         history,
-        initialView = null,
+        initialComponent = null,
         routes = defaultRoutes
     } = props;
-    const [component, setView] = useState(initialView)
+    const [component, setComponent] = useState(initialComponent)
     const [online, setOnline] = useState(getOnline())
     const router = useMemo(() => new UniversalRouter(routes), [
         UniversalRouter,
@@ -25,9 +27,9 @@ export default function App(props) {
     const resolveRoute = useCallback(location => router
         .resolve({ ...location, history })
         .then(action => {
-            setView(action.component)
+            setComponent(action.component)
         })
-    , [history, setView])
+    , [history, setComponent])
 
     useEffect(() => {
         resolveRoute(history.location)
@@ -51,9 +53,11 @@ export default function App(props) {
     }, [])
 
     return (
-        <main>
-            Here's the app shell {!online && <>(Offline)</>}<br />
-            {component}
-        </main>
+        <ApolloProvider client={apolloClient}>
+            <main>
+                Here's the app shell {!online && <>(Offline)</>}<br />
+                {component}
+            </main>
+        </ApolloProvider>
     )
 }

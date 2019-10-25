@@ -1,0 +1,7 @@
+#import "./PokemonSummary.graphql"
+
+query GetPokemons ($first:Int!) {
+    pokemons(first:$first) {
+        ...PokemonSummary
+    }
+}
