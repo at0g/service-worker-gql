@@ -134,9 +134,15 @@ export default {
 <title>PWA from WDS</title>
 </head>
 <body>
-<div>${req.url}</div>
+
+<header>
+    <pre>Document URL: ${req.url}</pre>
+</header>
+
 <div id="appContainer"></div>
+
 ${scripts.map(src => `<script src="${src}"></script>`).join('\n')}
+
 </body>
 </html>                    
 `

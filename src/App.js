@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { ApolloProvider } from '@apollo/react-hooks'
 import UniversalRouter from 'universal-router'
 import defaultRoutes from './routes'
@@ -18,7 +18,7 @@ export default function App(props) {
         routes = defaultRoutes
     } = props;
     const [component, setComponent] = useState(initialComponent)
-    const [online, setOnline] = useState(getOnline())
+
     const router = useMemo(() => new UniversalRouter(routes), [
         UniversalRouter,
         routes,
@@ -40,23 +40,33 @@ export default function App(props) {
         return unlisten
     }, [history, resolveRoute])
 
-    const handleOnline = useCallback(() => setOnline(true), [setOnline])
-    const handleOffline = useCallback(() => setOnline(false), [setOnline])
+    const [offline, setOffline] = useState(false)
 
-    useEffect(() => {
-        const onlineListener = window.addEventListener('online', handleOnline)
-        const offlineListener = window.addEventListener('offline', handleOffline)
-        return () => {
-            window.removeEventListener('online', onlineListener)
-            window.removeEventListener('offline', offlineListener)
-        }
-    }, [])
+    if (typeof navigator !== 'undefined') {
+        const handleOnline = useCallback(() => setOffline(false), [setOffline])
+        const handleOffline = useCallback(() => setOffline(true), [setOffline])
+        useLayoutEffect(() => {
+            const onlineListener = window.addEventListener('online', handleOnline)
+            const offlineListener = window.addEventListener('offline', handleOffline)
+            return () => {
+                window.removeEventListener('online', onlineListener)
+                window.removeEventListener('offline', offlineListener)
+            }
+        }, [handleOnline, handleOffline])
+    }
+
+
 
     return (
         <ApolloProvider client={apolloClient}>
             <main>
-                Here's the app shell {!online && <>(Offline)</>}<br />
-                {component}
+                <h1>App {offline && <>(Offline)</>}</h1>
+                <section>
+                    <header>
+                        <h2>Rendered route</h2>
+                    </header>
+                    {component}
+                </section>
             </main>
         </ApolloProvider>
     )

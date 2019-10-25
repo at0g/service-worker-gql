@@ -41,7 +41,7 @@ const routes = [
                 action: () => import(/* webpackChunkName: '404' */'./NotFound.js')
                     .then(module => ({
                         component: module.default,
-                        // statusCode: 404
+                        statusCode: 404
                     }))
             }
         ]
