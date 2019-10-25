@@ -21,8 +21,8 @@ export default {
         ]
     },
     externals: {
-        // react: 'React',
-        // 'react-dom': 'ReactDOM'
+        react: 'React',
+        'react-dom': 'ReactDOM'
     },
     optimization: {
         moduleIds: 'hashed',
@@ -64,8 +64,8 @@ export default {
 
                     server.middleware.waitUntilValid((stats) => {
                         const externals = [
-                            // 'https://unpkg.com/react@16.10.2/umd/react.development.js',
-                            // 'https://unpkg.com/react-dom@16.10.2/umd/react-dom.development.js',
+                            'https://unpkg.com/react@16.10.2/umd/react.development.js',
+                            'https://unpkg.com/react-dom@16.10.2/umd/react-dom.development.js',
                         ]
                         const assets = stats.compilation.entrypoints.get("main").chunks
                             .reduce((memo, chunk) => [...memo, ...chunk.files], [])

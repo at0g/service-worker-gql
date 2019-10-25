@@ -1,18 +1,18 @@
-self.__precacheManifest = [].concat(self.__precacheManifest || []);
+workbox.core.skipWaiting();
+workbox.core.clientsClaim();
+workbox.core.setCacheNameDetails({ prefix: 'pwa', suffix: '' })
+
+self.__precacheManifest = [
+    'https://unpkg.com/react@16.10.2/umd/react.development.js',
+    'https://unpkg.com/react-dom@16.10.2/umd/react-dom.development.js',
+    ...(self.__precacheManifest || [])
+]
 
 self.addEventListener('install', (event) => {
     const urls = ['/app-shell'];
     const cacheName = workbox.core.cacheNames.runtime;
     event.waitUntil(caches.open(cacheName).then((cache) => cache.addAll(urls)));
 });
-
-workbox.core.setCacheNameDetails({
-    prefix: 'pwa',
-    suffix: ''
-})
-
-workbox.core.skipWaiting();
-workbox.core.clientsClaim();
 
 // precache and route assets built by webpack
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
