@@ -42,8 +42,12 @@ export default function App(props) {
     const handleOffline = useCallback(() => setOnline(false), [setOnline])
 
     useEffect(() => {
-        window.addEventListener('online', handleOnline)
-        window.addEventListener('offline', handleOffline)
+        const onlineListener = window.addEventListener('online', handleOnline)
+        const offlineListener = window.addEventListener('offline', handleOffline)
+        return () => {
+            window.removeEventListener('online', onlineListener)
+            window.removeEventListener('offline', offlineListener)
+        }
     }, [])
 
     return (

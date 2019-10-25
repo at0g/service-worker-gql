@@ -21,8 +21,8 @@ export default {
         ]
     },
     externals: {
-        react: 'React',
-        'react-dom': 'ReactDOM'
+        // react: 'React',
+        // 'react-dom': 'ReactDOM'
     },
     optimization: {
         moduleIds: 'hashed',
@@ -35,15 +35,13 @@ export default {
         new InjectManifest({
             swDest: 'sw.js',
             swSrc: path.resolve('./src/sw-template.js'),
-            include: ['/app-shell', /\.js$/, /\.css$/],
-            templatedURLs: {
-                '/app-shell': new Date().toString(),
-            },
+            include: [/\.js$/, /\.css$/],
         }),
     ],
     devServer: {
         contentBase: false,
-        // historyApiFallback: true,
+        // set to false or req.url will be "/" in devServer.after callback
+        historyApiFallback: false,
         // https: false,
         stats: 'minimal',
         overlay: {
@@ -51,42 +49,52 @@ export default {
             errors: true,
         },
         after: (app, server) => {
-            app.use((req, res, next) => {
-                if (path.extname(req.url) !== '') {
-                    return next()
-                    // console.log('readFile', compiler.outputFileSystem.readFileSync('main.js'))
-                }
+            app
+                .use((req, res, next) => {
+                    req.url = req.url
+                        .replace(/\/index\.html/, '/')
+                    next()
+                })
+                .use((req, res, next) => {
+                    if (path.extname(req.url) !== '') {
+                        console.log('skipping: ', req.url)
+                        return next()
+                    }
+                    console.log('processing ', req.url)
 
-                server.middleware.waitUntilValid((stats) => {
-                    const externals = [
-                        'https://unpkg.com/react@16.10.2/umd/react.development.js',
-                        'https://unpkg.com/react-dom@16.10.2/umd/react-dom.development.js',
-                    ]
-                    const assets = stats.compilation.entrypoints.get("main").chunks
-                        .reduce((memo, chunk) => [...memo, ...chunk.files], [])
-                        .map(src => stats.compilation.compiler.options.output.publicPath + src)
+                    server.middleware.waitUntilValid((stats) => {
+                        const externals = [
+                            // 'https://unpkg.com/react@16.10.2/umd/react.development.js',
+                            // 'https://unpkg.com/react-dom@16.10.2/umd/react-dom.development.js',
+                        ]
+                        const assets = stats.compilation.entrypoints.get("main").chunks
+                            .reduce((memo, chunk) => [...memo, ...chunk.files], [])
+                            .map(src => stats.compilation.compiler.options.output.publicPath + src)
 
-                    const scripts = [
-                        ...externals,
-                        ...assets.filter(url => /\.js$/.test(url))
-                    ]
+                        const scripts = [
+                            ...externals,
+                            ...assets.filter(url => /\.js$/.test(url))
+                        ]
 
-                    res.send(`
+                        res
+                            .send(`
 <!doctype html>
 <html>
 <head>
 <title>PWA from WDS</title>
 </head>
 <body>
-<div id="appContainer">${req.url}</div>
+<div>${req.url}</div>
+<div id="appContainer"></div>
 ${scripts.map(src => `<script src="${src}"></script>`).join('\n')}
 </body>
 </html>                    
-`).end()
-
-                    return next()
+`
+                            )
+                            .end()
+                        return next()
+                    })
                 })
-            })
         }
     },
 }

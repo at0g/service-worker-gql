@@ -11,11 +11,13 @@ const el = <App
 
 ReactDOM.render(el, container, () => {
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/sw.js')
-            .then((registration) => {
-                console.info('ServiceWorker registration successful with scope: ', registration.scope);
-            }, (err) => {
-                console.warn('ServiceWorker registration failed: ', err);
-            });
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/sw.js')
+                .then((registration) => {
+                    console.info('ServiceWorker registration successful with scope: ', registration.scope);
+                }, (err) => {
+                    console.warn('ServiceWorker registration failed: ', err);
+                });
+        })
     }
 })

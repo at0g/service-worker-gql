@@ -26,11 +26,19 @@ const routes = [
                     }))
             },
             {
+                path: '/app-shell',
+                action: () => () => <div>App shell</div>
+            },
+            {
+                path: '/greet',
+                action: () => () => <div>Hi there!</div>
+            },
+            {
                 path: '(.*)',
                 action: () => import(/* webpackChunkName: '404' */'./NotFound.js')
                     .then(module => ({
                         component: module.default,
-                        statusCode: 404
+                        // statusCode: 404
                     }))
             }
         ]
