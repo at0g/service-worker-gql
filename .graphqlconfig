@@ -1,0 +1,15 @@
+{
+  "name": "https://graphql-pokemon.now.sh",
+  "schemaPath": "schema.graphql",
+  "extensions": {
+    "endpoints": {
+      "origin": {
+        "url": "http://localhost:8080/graphql"
+      },
+      "remote": {
+        "url": "https://graphql-pokemon.now.sh?",
+        "introspect": true
+      }
+    }
+  }
+}
