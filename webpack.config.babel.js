@@ -1,4 +1,5 @@
 import path from 'path'
+import webpack from 'webpack'
 import { CleanWebpackPlugin } from 'clean-webpack-plugin'
 import { InjectManifest } from 'workbox-webpack-plugin'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
@@ -8,36 +9,51 @@ import bodyParser from 'body-parser'
 
 const externals = [
     'https://unpkg.com/react@16.10.2/umd/react.development.js',
-    'https://unpkg.com/react-dom@16.10.2/umd/react-dom.development.js',
+    // 'https://unpkg.com/react-dom@16.10.2/umd/react-dom.development.js',
 ]
 
 export default {
     devtool: 'cheap-module-eval-source-map',
     target: 'web',
-    entry: path.resolve('./src/entry-web.js'),
+    entry: {
+        main: [
+            'react-hot-loader/patch',
+            path.resolve('./src/main.js')
+        ]
+    },
     output: {
         path: path.resolve('./dist/web'),
         publicPath: '/',
-        filename: '[name]-[contenthash].js',
+        filename: '[name]-[hash].js',
         chunkFilename: '[name]-[chunkhash].js'
     },
     module: {
         rules: [
             {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        envName: 'webpack',
+                    },
+                }
+            },
+            {
                 test: /\.graphql$/,
                 exclude: /node_modules/,
                 loader: 'graphql-tag/loader'
-            },
-            {
-                test: /\.js$/,
-                exclude: /node_modules/,
-                use: 'babel-loader'
             },
         ]
     },
     externals: {
         react: 'React',
-        'react-dom': 'ReactDOM'
+        // 'react-dom': 'ReactDOM'
+    },
+    resolve: {
+        alias: {
+            'react-dom': '@hot-loader/react-dom',
+        },
     },
     optimization: {
         moduleIds: 'hashed',
@@ -63,6 +79,9 @@ export default {
     },
     plugins: [
         new CleanWebpackPlugin(),
+        new webpack.DefinePlugin({
+            'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+        }),
         new InjectManifest({
             swDest: 'sw.js',
             swSrc: path.resolve('./src/sw-template.js'),
@@ -80,6 +99,7 @@ export default {
         // set to false or req.url will be "/" in devServer.after callback
         historyApiFallback: false,
         https: false,
+        hot: true,
         stats: 'minimal',
         overlay: {
             warnings: true,

@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react'
+import { hot } from 'react-hot-loader/root'
 import { ApolloProvider } from '@apollo/react-hooks'
 import UniversalRouter from 'universal-router'
 import defaultRoutes from './routes'
@@ -9,8 +10,7 @@ function getOnline() {
     }
     return navigator.onLine
 }
-
-export default function App(props) {
+function App(props) {
     const {
         apolloClient,
         history,
@@ -71,3 +71,5 @@ export default function App(props) {
         </ApolloProvider>
     )
 }
+
+export default hot(App)

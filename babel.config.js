@@ -1,15 +1,28 @@
 module.exports = {
-    // sourceType: 'module',
     presets: [
-        '@babel/preset-react',
         ['@babel/preset-env', {
+            modules: false,
             targets: {
-                browsers: ['last 2 versions'],
-                // esmodules: true
+                esmodules: true
             }
-        }]
+        }],
+        '@babel/preset-react',
     ],
-    // plugins: [
-    //     'babel-plugin-graphql-tag'
-    // ]
+    plugins: [
+        '@babel/plugin-syntax-dynamic-import',
+        '@babel/plugin-proposal-export-default-from',
+        '@babel/plugin-proposal-class-properties',
+    ],
+    env: {
+        webpack: {
+            plugins: ['react-hot-loader/babel'],
+        },
+        node: {
+            plugins: [
+                'babel-plugin-graphql-tag',
+                '@babel/plugin-transform-modules-commonjs',
+                'babel-plugin-dynamic-import-node',
+            ],
+        },
+    }
 }

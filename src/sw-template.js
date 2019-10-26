@@ -4,8 +4,8 @@ workbox.core.clientsClaim();
 workbox.core.setCacheNameDetails({ prefix: 'pwa', suffix: '' })
 
 self.__precacheManifest = [
-    'https://unpkg.com/react@16.10.2/umd/react.development.js',
-    'https://unpkg.com/react-dom@16.10.2/umd/react-dom.development.js',
+    'https://unpkg.com/react@16.11.0/umd/react.development.js',
+    // 'https://unpkg.com/react-dom@16.10.2/umd/react-dom.development.js',
     ...(self.__precacheManifest || [])
 ]
 
