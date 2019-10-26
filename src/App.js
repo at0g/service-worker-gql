@@ -3,13 +3,8 @@ import { hot } from 'react-hot-loader/root'
 import { ApolloProvider } from '@apollo/react-hooks'
 import UniversalRouter from 'universal-router'
 import defaultRoutes from './routes'
+import { useOffline } from './hooks'
 
-function getOnline() {
-    if (typeof navigator === 'undefined') {
-        return true
-    }
-    return navigator.onLine
-}
 function App(props) {
     const {
         apolloClient,
@@ -40,22 +35,7 @@ function App(props) {
         return unlisten
     }, [history, resolveRoute])
 
-    const [offline, setOffline] = useState(false)
-
-    if (typeof navigator !== 'undefined') {
-        const handleOnline = useCallback(() => setOffline(false), [setOffline])
-        const handleOffline = useCallback(() => setOffline(true), [setOffline])
-        useLayoutEffect(() => {
-            const onlineListener = window.addEventListener('online', handleOnline)
-            const offlineListener = window.addEventListener('offline', handleOffline)
-            return () => {
-                window.removeEventListener('online', onlineListener)
-                window.removeEventListener('offline', offlineListener)
-            }
-        }, [handleOnline, handleOffline])
-    }
-
-
+    const offline = useOffline()
 
     return (
         <ApolloProvider client={apolloClient}>
