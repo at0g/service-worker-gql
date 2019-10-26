@@ -6,11 +6,11 @@ const routes = [
         path: '',
         action: ({ next }) => next()
             .then(action => {
-                const child = React.createElement(isValidElementType(action) ? action : action.component)
+                const child = React.createElement(isValidElementType(action) ? action : action.Component)
 
                 return {
                     ...action,
-                    component: () => (
+                    Component: () => (
                         <main data-component-id='routes-root'>
                             {child}
                         </main>
@@ -37,10 +37,13 @@ const routes = [
                     })
             },
             {
+                path: '/pokemon/:'
+            },
+            {
                 path: '(.*)',
                 action: () => import(/* webpackChunkName: '404' */'./NotFound.js')
                     .then(module => ({
-                        component: module.default,
+                        Component: module.default,
                         statusCode: 404
                     }))
             }
