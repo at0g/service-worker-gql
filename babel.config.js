@@ -1,11 +1,14 @@
 module.exports = {
     presets: [
-        ['@babel/preset-env', {
-            modules: false,
-            targets: {
-                esmodules: true
-            }
-        }],
+        [
+            '@babel/preset-env',
+            {
+                modules: false,
+                targets: {
+                    esmodules: true,
+                },
+            },
+        ],
         '@babel/preset-react',
     ],
     plugins: [
@@ -24,5 +27,5 @@ module.exports = {
                 'babel-plugin-dynamic-import-node',
             ],
         },
-    }
+    },
 }

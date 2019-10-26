@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react'
+import React, {
+    useCallback,
+    useEffect,
+    useLayoutEffect,
+    useMemo,
+    useState,
+} from 'react'
 import { hot } from 'react-hot-loader/root'
 import { ApolloProvider } from '@apollo/react-hooks'
 import UniversalRouter from 'universal-router'
@@ -10,11 +16,14 @@ function App(props) {
         apolloClient,
         history,
         initialView = null,
-        routes = defaultRoutes
-    } = props;
+        routes = defaultRoutes,
+    } = props
 
     const offline = useOffline()
-    const router = useMemo(() => new UniversalRouter(routes), [UniversalRouter, routes ]);
+    const router = useMemo(() => new UniversalRouter(routes), [
+        UniversalRouter,
+        routes,
+    ])
     const action = useRouteAction(router, history)
 
     return (

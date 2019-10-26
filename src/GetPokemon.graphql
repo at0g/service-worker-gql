@@ -1,4 +1,4 @@
-query GetPokenmon ($id: String) {
+query GetPokemon($id: String) {
     pokemon(id: $id) {
         id
         number
@@ -36,7 +36,6 @@ fragment DetailsFragment on Pokemon {
     types
     resistant
     weaknesses
-
 
     fleeRate
 

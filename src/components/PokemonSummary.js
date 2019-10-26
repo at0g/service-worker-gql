@@ -2,8 +2,8 @@ import React from 'react'
 import styled from 'styled-components'
 
 const Card = styled.div`
-    background-color: white; 
-    box-shadow: 0 0 3px 0 rgba(0,0,0,0.2);
+    background-color: white;
+    box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.2);
     display: block;
     padding: 5px;
     position: relative;
@@ -21,7 +21,7 @@ const Name = styled.div`
     bottom: 0;
     left: 0;
     right: 0;
-    background-color: rgba(0,0,0,0.75);
+    background-color: rgba(0, 0, 0, 0.75);
     text-align: center;
     font-family: sans-serif;
     text-transform: uppercase;

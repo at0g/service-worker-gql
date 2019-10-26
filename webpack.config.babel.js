@@ -16,16 +16,13 @@ export default {
     devtool: 'cheap-module-eval-source-map',
     target: 'web',
     entry: {
-        main: [
-            'react-hot-loader/patch',
-            path.resolve('./src/main.js')
-        ]
+        main: ['react-hot-loader/patch', path.resolve('./src/main.js')],
     },
     output: {
         path: path.resolve('./dist/web'),
         publicPath: '/',
         filename: '[name]-[hash].js',
-        chunkFilename: '[name]-[chunkhash].js'
+        chunkFilename: '[name]-[chunkhash].js',
     },
     module: {
         rules: [
@@ -37,14 +34,14 @@ export default {
                     options: {
                         envName: 'webpack',
                     },
-                }
+                },
             },
             {
                 test: /\.graphql$/,
                 exclude: /node_modules/,
-                loader: 'graphql-tag/loader'
+                loader: 'graphql-tag/loader',
             },
-        ]
+        ],
     },
     externals: {
         react: 'React',
@@ -67,20 +64,20 @@ export default {
                     test: /\/node_modules\//,
                     chunks: 'all',
                     enforce: true,
-                    priority: -10
+                    priority: -10,
                 },
                 default: {
                     minChunks: 2,
                     priority: -20,
-                    reuseExistingChunk: true
-                }
-            }
-        }
+                    reuseExistingChunk: true,
+                },
+            },
+        },
     },
     plugins: [
         new CleanWebpackPlugin(),
         new webpack.DefinePlugin({
-            'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+            'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
         }),
         new InjectManifest({
             swDest: 'sw.js',
@@ -91,8 +88,8 @@ export default {
             inject: false,
             template,
             appMountId: 'appContainer',
-            scripts: externals
-        })
+            scripts: externals,
+        }),
     ],
     devServer: {
         contentBase: false,
@@ -106,28 +103,31 @@ export default {
             errors: true,
         },
         after: (app, server) => {
-            app.post('/graphql', bodyParser.raw({ type: '*/*' }), (req, res, next) => {
-                return fetch('https://graphql-pokemon.now.sh/?', {
-                    method: 'post',
-                    body: req.body.toString(),
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                })
-                    .then((result) => {
-                        if (!result.ok) {
-                            return result.text().then(message => {
-                                throw new Error(message)
-                            })
-                        }
-                        return result.json().then(data => res.json(data))
+            app.post(
+                '/graphql',
+                bodyParser.raw({ type: '*/*' }),
+                (req, res, next) => {
+                    return fetch('https://graphql-pokemon.now.sh/?', {
+                        method: 'post',
+                        body: req.body.toString(),
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
                     })
-                    .catch(next)
-            })
+                        .then(result => {
+                            if (!result.ok) {
+                                return result.text().then(message => {
+                                    throw new Error(message)
+                                })
+                            }
+                            return result.json().then(data => res.json(data))
+                        })
+                        .catch(next)
+                }
+            )
 
             app.use((req, res, next) => {
-                req.url = req.url
-                    .replace(/\/index\.html/, '/')
+                req.url = req.url.replace(/\/index\.html/, '/')
                 next()
             })
             app.use((req, res, next) => {
@@ -137,17 +137,26 @@ export default {
                 }
                 console.log('processing ', req.url)
 
-                server.middleware.waitUntilValid((stats) => {
-                    const assets = stats.compilation.entrypoints.get("main").chunks
-                        .reduce((memo, chunk) => [...memo, ...chunk.files], [])
-                        .map(src => stats.compilation.compiler.options.output.publicPath + src)
+                server.middleware.waitUntilValid(stats => {
+                    const assets = stats.compilation.entrypoints
+                        .get('main')
+                        .chunks.reduce(
+                            (memo, chunk) => [...memo, ...chunk.files],
+                            []
+                        )
+                        .map(
+                            src =>
+                                stats.compilation.compiler.options.output
+                                    .publicPath + src
+                        )
 
                     const scripts = [
                         ...externals,
-                        ...assets.filter(url => /\.js$/.test(url))
+                        ...assets.filter(url => /\.js$/.test(url)),
                     ]
 
-                    res.send(`
+                    res.send(
+                        `
 <!doctype html>
 <html>
 <head>
@@ -166,11 +175,10 @@ ${scripts.map(src => `<script src="${src}"></script>`).join('\n')}
 </body>
 </html>                    
 `
-                            )
-                            .end()
-                        return next()
-                    })
+                    ).end()
+                    return next()
                 })
-        }
+            })
+        },
     },
 }

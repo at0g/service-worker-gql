@@ -1,30 +1,28 @@
-import { useLayoutEffect, useMemo, useState, } from 'react'
+import { useLayoutEffect, useMemo, useState } from 'react'
 
 export default function useOffline() {
     const [offline, setOffline] = useState(false)
 
-    if (typeof window === 'undefined' ) {
+    if (typeof window === 'undefined') {
         return offline
     }
 
     const eventListeners = useMemo(() => {
         const handles = {
             offline: () => setOffline(true),
-            online: () => setOffline(false)
+            online: () => setOffline(false),
         }
         return {
             listen: () => {
-                const listeners = ['online', 'offline']
-                    .map(type => {
-                        const e = window.addEventListener(type, handles[type])
-                        return () => window.removeEventListener(type, e)
-                    }
-                )
+                const listeners = ['online', 'offline'].map(type => {
+                    const e = window.addEventListener(type, handles[type])
+                    return () => window.removeEventListener(type, e)
+                })
 
                 return () => {
                     listeners.forEach(remove => remove())
                 }
-            }
+            },
         }
     }, [setOffline])
 
