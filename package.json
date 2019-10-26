@@ -25,6 +25,7 @@
     "node-fetch": "^2.6.0",
     "react-is": "^16.11.0",
     "serve": "^11.2.0",
+    "styled-components": "^4.4.0",
     "universal-router": "^8.3.0"
   },
   "devDependencies": {
