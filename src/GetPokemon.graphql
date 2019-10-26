@@ -1,0 +1,62 @@
+query GetPokenmon ($id: String) {
+    pokemon(id: $id) {
+        id
+        number
+        name
+        image
+        classification
+
+        ...DetailsFragment
+
+        evolutions {
+            ...DetailsFragment
+        }
+
+        evolutionRequirements {
+            amount
+            name
+        }
+    }
+}
+
+fragment DetailsFragment on Pokemon {
+    id
+    name
+    image
+
+    maxCP
+    maxHP
+    height {
+        ...DimensionFragment
+    }
+    weight {
+        ...DimensionFragment
+    }
+
+    types
+    resistant
+    weaknesses
+
+
+    fleeRate
+
+    attacks {
+        fast {
+            ...AttackFragment
+        }
+        special {
+            ...AttackFragment
+        }
+    }
+}
+
+fragment DimensionFragment on PokemonDimension {
+    maximum
+    minimum
+}
+
+fragment AttackFragment on Attack {
+    name
+    damage
+    type
+}
