@@ -32,15 +32,18 @@ const routes = [
             {
                 path: '/pokemons',
                 action: () =>
-                    import(/* webpackChunkName: 'Pokemons' */ './Pokemons.js')
-                        .then(module => module.default)
-                        .catch(err => {
-                            console.error(err)
-                            throw err
-                        }),
+                    import(
+                        /* webpackChunkName: 'Pokemons' */ './Pokemons.js'
+                    ).then(module => module.default),
             },
             {
-                path: '/pokemon/:',
+                path: '/pokemon/:id',
+                action: context =>
+                    import(
+                        /* webpackChunkName: 'Pokemon' */ './Pokemon.js'
+                    ).then(module => () =>
+                        React.createElement(module.default, context.params)
+                    ),
             },
             {
                 path: '(.*)',

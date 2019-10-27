@@ -3,10 +3,12 @@ import styled from 'styled-components'
 
 const Card = styled.div`
     background-color: white;
+    box-sizing: border-box;
     box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.2);
     display: block;
     padding: 5px;
     position: relative;
+    height: 100%;
 `
 
 const Image = styled.img`
@@ -31,7 +33,7 @@ const Name = styled.div`
 `
 
 export default function PokemonSummary(props) {
-    const { image, name } = props
+    const { id, image, name } = props
     return (
         <Card>
             <Image alt={`image of ${name}`} src={image} />
