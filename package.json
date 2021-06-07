@@ -1,10 +1,11 @@
 {
-  "name": "pwa",
+  "name": "service-worker-gql",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "author": "",
   "license": "ISC",
+  "private": true,
   "scripts": {
     "start": "serve dist/web -s",
     "build": "cross-env BABEL_ENV=node NODE_ENV=production webpack -p --devtool none",
