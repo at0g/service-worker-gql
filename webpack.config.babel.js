@@ -107,7 +107,7 @@ export default {
                 '/graphql',
                 bodyParser.raw({ type: '*/*' }),
                 (req, res, next) => {
-                    return fetch('https://graphql-pokemon.now.sh/?', {
+                    return fetch('http://localhost:5000', {
                         method: 'post',
                         body: req.body.toString(),
                         headers: {
